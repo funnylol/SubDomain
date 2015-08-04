@@ -1,0 +1,4 @@
+git
+admin
+www
+oa
