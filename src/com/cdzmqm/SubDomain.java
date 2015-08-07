@@ -50,6 +50,11 @@ public class SubDomain{
 			String data = Request.doGet(get);
 			System.out.println(get);
 			System.out.println(data);
+			if(data.indexOf("Chora")>0)
+			{
+				System.out.println("webshell is");
+				System.exit(0);
+			}
 		}
 	}
 	public static String getPhptmp(String data)
