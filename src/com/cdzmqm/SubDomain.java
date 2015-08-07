@@ -50,9 +50,13 @@ public class SubDomain{
 			String data = Request.doGet(get);
 			System.out.println(get);
 			System.out.println(data);
-			if(data.indexOf("Chora")>0)
+			if(data.indexOf("wooyun_true")>-1)
 			{
 				System.out.println("webshell is");
+				System.exit(0);
+			} else if(data.indexOf("wooyun_false")>-1)
+			{
+				System.out.println(data);
 				System.exit(0);
 			}
 		}
