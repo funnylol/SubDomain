@@ -24,7 +24,7 @@ public class Request {
 			out.flush();
 			out.close();
 			Scanner scanner = new Scanner(uc.getInputStream());
-			while(scanner.hasNext()) {
+			while(scanner.hasNextLine()) {
 				data += scanner.nextLine()+"\r\n";
 			}
 		} catch (Exception e) {
@@ -51,7 +51,7 @@ public class Request {
 			out.flush();
 			out.close();
 			Scanner scanner = new Scanner(uc.getInputStream());
-			while(scanner.hasNext()) {
+			while(scanner.hasNextLine()) {
 				data += scanner.nextLine()+"\r\n";
 			}
 		} catch (Exception e) {
@@ -68,7 +68,28 @@ public class Request {
 			URL u = new URL(url);
 			InputStream in = u.openStream();
 			Scanner scanner = new Scanner(in);
-			while(scanner.hasNext()) {
+			while(scanner.hasNextLine()) {
+				data += scanner.nextLine()+"\r\n";
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			data = "error";
+		}
+		return data;
+	}
+	public static String doGet(String url,HashMap<String,String> advance)
+	{
+		String data = "";
+		try {
+			URL u = new URL(url);
+			URLConnection uc = u.openConnection();
+			Set<Map.Entry<String, String>> headers = advance.entrySet();
+			for (Map.Entry<String, String> header: headers)
+			{
+				uc.setRequestProperty(header.getKey(),header.getValue());
+			}
+			Scanner scanner = new Scanner(uc.getInputStream());
+			while(scanner.hasNextLine()) {
 				data += scanner.nextLine()+"\r\n";
 			}
 		} catch (Exception e) {
