@@ -13,7 +13,6 @@ import org.xbill.DNS.*;
 public class SubDomain{
 	public static void main(String[] args) throws Exception 
 	{	
-		
 	}
 	public static String getDomain(String url,int type) throws Exception
 	{
