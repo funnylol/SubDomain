@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Request {
-	public static String doPost(String url,String param)
+	public static String doPost(String url,String param,String code)
 	{
 		String data = "";
 		try {
@@ -23,14 +23,14 @@ public class Request {
 			out.write(param);
 			out.flush();
 			out.close();
-			Scanner scanner = new Scanner(uc.getInputStream());
+			Scanner scanner = new Scanner(uc.getInputStream(),code);
 			while(scanner.hasNextLine()) {
 				data += scanner.nextLine()+"\r\n";
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			data = "error";
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return data;
 	}
