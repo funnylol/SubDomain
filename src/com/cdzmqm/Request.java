@@ -162,7 +162,7 @@ public class Request {
 		try {	
 			URL u = new URL(url);
 			HttpURLConnection huc = (HttpURLConnection) u.openConnection();
-			huc.connect();
+//			huc.connect();
 			code = huc.getResponseCode();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
