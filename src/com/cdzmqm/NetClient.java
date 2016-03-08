@@ -11,6 +11,6 @@ public class NetClient {
 	{
 //		Socket s = new Socket("127.0.0.1", 1234);
 		PrintStream ps = new PrintStream("f:/1.txt");
-		ps.write(arg0);
+		
 	}
 }
